@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>نکات ریاضی دبستان و دبیرستان</title>
+</head>
+<body style="text-align: center; font-family: sans-serif;">
+  <h1>آموزش ریاضی تقویتی</h1>
+  <p>مدرس: شکیبا میرانی</p>
+  <p>مناسب سنین: اول تا دوازدهم</p>
+  <button onclick="addToCart('دوره 1')">افزودن به سبد خرید</button>
+
+  <h1>آموزش ریاضی تقویتی و نکات بیشتر</h1>
+  <p>مدرس: شکیبا میرانی</p>
+  <p>مناسب سنین: اول تا دوازدهم</p>
+  <button onclick="addToCart('دوره 2')">افزودن به سبد خرید</button>
+
+  <p>تمام این دوره‌ها ۱۰ هزار تومان هستند.</p>
+
+  <button onclick="checkout()">پرداخت</button>
+
+  <script>
+    function addToCart(productName) {
+      fetch('/add-to-cart', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ product: productName })
+      }).then(res => res.json())
+        .then(data => alert(data.message));
+    }
+
+    function checkout() {
+      fetch('/checkout', {
+        method: 'POST'
+      }).then(res => res.json())
+        .then(data => alert(data.message));
+    }
+  </script>
+</body>
+</html>
