@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سنگ کاغذ قیچی متنی با امتیاز</title>
+    <style>
+        body {
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            text-align: center;
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            margin: 0;
+        }
+        
+        .container {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+            width: 100%;
+            max-width: 500px;
+        }
+        
+        h1 {
+            color: #2575fc;
+            margin-bottom: 20px;
+            font-size: 28px;
+        }
+        
+        .welcome {
+            margin-bottom: 25px;
+            color: #6a11cb;
+            font-size: 18px;
+        }
+        
+        .input-area {
+            margin: 20px 0;
+        }
+        
+        input[type="text"] {
+            width: 70%;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+            text-align: center;
+            transition: border-color 0.3s;
+        }
+        
+        input[type="text"]:focus {
+            border-color: #6a11cb;
+            outline: none;
+        }
+        
+        input[type="button"] {
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 12px 25px;
+            margin-top: 15px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        input[type="button"]:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .result {
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 15px;
+            background-color: #f8f9fa;
+            display: none;
+        }
+        
+        .choices {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+        }
+        
+        .choice {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .choice p {
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        
+        .emoji {
+            font-size: 40px;
+            width: 70px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background-color: #e9ecef;
+        }
+        
+        .result-text {
+            font-size: 22px;
+            font-weight: bold;
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 10px;
+        }
+        
+        .win {
+            color: #28a745;
+            background-color: rgba(40, 167, 69, 0.1);
+        }
+        
+        .lose {
+            color: #dc3545;
+            background-color: rgba(220, 53, 69, 0.1);
+        }
+        
+        .draw {
+            color: #ffc107;
+            background-color: rgba(255, 193, 7, 0.1);
+        }
+        
+        .score-board {
+            display: flex;
+            justify-content: space-around;
+            margin: 25px 0;
+            padding: 15px;
+            background-color: #e9ecef;
+            border-radius: 15px;
+            font-weight: bold;
+        }
+        
+        .score {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .score-value {
+            font-size: 28px;
+            color: #2575fc;
+        }
+        
+        .instructions {
+            margin-top: 30px;
+            padding: 15px;
+            background-color: #e9ecef;
+            border-radius: 10px;
+            font-size: 14px;
+        }
+        
+        .instructions h3 {
+            margin-bottom: 10px;
+            color: #6a11cb;
+        }
+        
+        .instructions ul {
+            text-align: right;
+            padding-right: 20px;
+        }
+        
+        .instructions li {
+            margin-bottom: 5px;
+        }
+        
+        @media (max-width: 500px) {
+            .container {
+                padding: 20px;
+            }
+            
+            input[type="text"] {
+                width: 100%;
+            }
+            
+            .choices {
+                flex-direction: column;
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>بازی سنگ، کاغذ، قیچی</h1>
+        <p class="welcome">سلام دوست خوبم! انتخاب کن و ببین چه کسی برنده میشه</p>
+        
+        <div class="score-board">
+            <div class="score">
+                <div>امتیاز شما</div>
+                <div class="score-value" id="userScore">0</div>
+            </div>
+            <div class="score">
+                <div>امتیاز ربات</div>
+                <div class="score-value" id="computerScore">0</div>
+            </div>
+        </div>
+        
+        <div class="input-area">
+            <input type="text" id="userInput" placeholder="سنگ، کاغذ یا قیچی بنویسید">
+            <br>
+            <input type="button" id="playButton" value="ببین کی میبره">
+        </div>
+        
+        <div class="result" id="resultSection">
+            <div class="choices">
+                <div class="choice">
+                    <p>انتخاب شما</p>
+                    <div class="emoji" id="userChoiceEmoji">❔</div>
+                </div>
+                <div class="choice">
+                    <p>انتخاب ربات</p>
+                    <div class="emoji" id="computerChoiceEmoji">❔</div>
+                </div>
+            </div>
+            
+            <div class="result-text" id="resultText">نتیجه بازی اینجا نمایش داده می‌شود</div>
+        </div>
+        
+        <div class="instructions">
+            <h3>راهنما:</h3>
+            <ul>
+                <li>سنگ قیچی را می‌برد (سنگ ➔ قیچی)</li>
+                <li>قیچی کاغذ را می‌برد (قیچی ➔ کاغذ)</li>
+                <li>کاغذ سنگ را می‌برد (کاغذ ➔ سنگ)</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // تعریف متغیرهای امتیاز
+        let userScore = 0;
+        let computerScore = 0;
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            const userInput = document.getElementById('userInput');
+            const playButton = document.getElementById('playButton');
+            const resultSection = document.getElementById('resultSection');
+            const userChoiceEmoji = document.getElementById('userChoiceEmoji');
+            const computerChoiceEmoji = document.getElementById('computerChoiceEmoji');
+            const resultText = document.getElementById('resultText');
+            const userScoreElement = document.getElementById('userScore');
+            const computerScoreElement = document.getElementById('computerScore');
+            
+            // نگاشت انتخاب‌ها به ایموجی
+            const emojiMap = {
+                'سنگ': '✊',
+                'کاغذ': '✋',
+                'قیچی': '✌️'
+            };
+            
+            playButton.addEventListener('click', playGame);
+            
+            userInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    playGame();
+                }
+            });
+            
+            function playGame() {
+                const userChoice = userInput.value.trim().toLowerCase();
+                
+                // بررسی معتبر بودن ورودی کاربر
+                if (userChoice !== 'سنگ' && userChoice !== 'کاغذ' && userChoice !== 'قیچی') {
+                    alert('لطفاً فقط «سنگ»، «کاغذ» یا «قیچی» وارد کنید!');
+                    userInput.value = '';
+                    userInput.focus();
+                    return;
+                }
+                
+                // انتخاب تصادفی ربات
+                const choices = ['سنگ', 'کاغذ', 'قیچی'];
+                const computerChoice = choices[Math.floor(Math.random() * 3)];
+                
+                // نمایش انتخاب‌ها
+                userChoiceEmoji.textContent = emojiMap[userChoice];
+                computerChoiceEmoji.textContent = emojiMap[computerChoice];
+                
+                // محاسبه نتیجه
+                let result = '';
+                
+                if (userChoice === computerChoice) {
+                    result = 'مساوی شد!';
+                    resultText.className = 'result-text draw';
+                } else if (
+                    (userChoice === 'سنگ' && computerChoice === 'قیچی') ||
+                    (userChoice === 'کاغذ' && computerChoice === 'سنگ') ||
+                    (userChoice === 'قیچی' && computerChoice === 'کاغذ')
+                ) {
+                    result = 'شما برنده شدید! 🎉';
+                    resultText.className = 'result-text win';
+                    userScore++;
+                    userScoreElement.textContent = userScore;
+                } else {
+                    result = 'ربات برنده شد! 🤖';
+                    resultText.className = 'result-text lose';
+                    computerScore++;
+                    computerScoreElement.textContent = computerScore;
+                }
+                
+                resultText.textContent = result;
+                resultSection.style.display = 'block';
+                
+                // پاک کردن فیلد ورودی برای بازی بعدی
+                userInput.value = '';
+                userInput.focus();
+            }
+        });
+    </script>
+</body>
+</html>
